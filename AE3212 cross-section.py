@@ -80,7 +80,7 @@ while n<=10: #Collecting coordinate data of stiffeners
             nstiff.append(n+1)
     n+=1
 
-print(zpos,ypos,nstiff)
+##return nstiff, zpos, ypos
 plt.plot(zpos, ypos, "ro")
 plt.gca().invert_xaxis()
 plt.axis("equal")
