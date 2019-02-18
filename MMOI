@@ -3,24 +3,28 @@
 
 #CALCULATE THE MMOI around the y axis
 
-lst=[]
-n=0
-for j in Aboom:
+def mmoiy(Aboom,zcentr,zpos):
+    lst=[]
+    n=0
+    for j in Aboom:
     
-    x=j*((zcentr-zpos[n])**2)
-    lst.append(x)
-    n+=1
+        x=j*((zcentr-zpos[n])**2)
+        lst.append(x)
+        n+=1
     
-Iyy=sum(lst)
+    Iyy=sum(lst)
+    return Iyy
 
 #CALCULATE THE MMOI around the z axis
 
-l=[]
-n=0
-for j in Aboom:
+def mmoiy(Aboom,ypos):
+    l=[]
+    n=0
+    for j in Aboom:
 
-    q=j*((ypos[n])**2)
-    l.append(q)
-    n+=1
+        q=j*((ypos[n])**2)
+        l.append(q)
+        n+=1
 
-Izz=sum(l)
+    Izz=sum(l)
+    return Izz
