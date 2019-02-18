@@ -61,7 +61,7 @@ def boomarea(nstiff,zpos,ypos):
             B.append(Bnew)
             
     
-    return(B)
+    return B
 
 #plt.subplot(121)
 #plt.plot(zpos,ypos, "-ro")
