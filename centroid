@@ -1,0 +1,15 @@
+# CALCULATE THE CENTROID
+
+Aboom=[100,100,100,100,100,100,100,100,100,100,100]
+listz=[]
+
+n=0
+for i in Aboom:
+    
+    zcentroid=((i*zpos[n])/sum(Aboom))
+    listz.append(zcentroid)
+    
+    n+=1
+
+zcentr=sum(listz)
+
