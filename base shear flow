@@ -1,9 +1,9 @@
-#find base shear flow given the forces P and q, the angle theta, the list of areas Aboom, the z and y positions and it returns
+#find base shear flow given the forces P and q, the angle theta, the MOI Iyy and Izz, the list of areas Aboom, the z and y positions and it returns
 # a list of shear flows starting from TE and going up
 
 
 
-def qb(P,q,theta,Aboom,zpos,ypos):
+def qb(P,q,theta,Aboom,zpos,ypos,Iyy,Izz):
     h=0
     lstqb=[]
     for n in Aboom:
