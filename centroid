@@ -1,15 +1,17 @@
 # CALCULATE THE CENTROID
 
-Aboom=[100,100,100,100,100,100,100,100,100,100,100]
-listz=[]
+# given Aboom the are of the booms and the z position of the booms
 
-n=0
-for i in Aboom:
+def centroid(Aboom,zpos):
     
-    zcentroid=((i*zpos[n])/sum(Aboom))
-    listz.append(zcentroid)
+    listz=[]
+
+    n=0
+    for i in Aboom:
     
-    n+=1
-
-zcentr=sum(listz)
-
+        zcentroid=((i*zpos[n])/sum(Aboom))
+        listz.append(zcentroid)
+    
+        n+=1
+    zcentr=sum(listz)
+    return zcentr
