@@ -59,7 +59,7 @@ def boomarea(nstiff,zpos,ypos):
         elif i==2 or i==10:
             Bnew = Astiff + (tsk*phi/6)*(2+ypos[2]/ypos[1]) + (tsk*phi/6)*(2+ypos[3]/ypos[2])
             B.append(Bnew)
-        print (i)      
+            
     
     return(B)
 
