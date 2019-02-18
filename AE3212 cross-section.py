@@ -89,42 +89,4 @@ plt.axis("equal")
 plt.grid(linestyle='-', linewidth='0.5')
 plt.show()
 
-# CALCULATE THE CENTROID
 
-Aboom=[100,100,100,100,100,100,100,100,100,100,100]
-listz=[]
-
-n=0
-for i in Aboom:
-    
-    zcentroid=((i*zpos[n])/sum(Aboom))
-    listz.append(zcentroid)
-    
-    n+=1
-
-zcentr=sum(listz)
-
-
-#CALCULATE THE MMOI around the y axis
-
-lst=[]
-n=0
-for j in Aboom:
-    
-    x=j*((zcentr-zpos[n])**2)
-    lst.append(x)
-    n+=1
-    
-Iyy=sum(lst)
-
-#CALCULATE THE MMOI around the z axis
-
-l=[]
-n=0
-for j in Aboom:
-
-    q=j*((ypos[n])**2)
-    l.append(q)
-    n+=1
-
-Izz=sum(l)
