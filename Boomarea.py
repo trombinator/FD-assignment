@@ -3,14 +3,15 @@
 ##This script finds the section properties of the simplified boom cross section, based on
 ##the actual found moments of inertia and centroid of the thin-walled cross section, and
 ##the applied moments on the cross section. The outputs are the boom areas at a given
-##position on the aileron. All units are in meters.
+##position on the aileron (according to stiffener numbering). All units are in meters.
 
 #-----FUNCTION INPUTS-----
 ##This script requires as function inputs the aileron cross section geometry,
-##the thin-walled moments of inertia and centroid, and the local internal moments in z'
-##and y' direction.
-def aboom(Mz,My):
+##the thin-walled moments of inertia and centroid, the sigma ratio function 
+##and the local internal moments in z'and y' direction.
+def aboom(Mz, My):
     from math import sqrt, pi
+    from matplotlib import pyplot as plt
     from actmoi import actualmoi
     from sigmarat import sigratio
     from actcent import centactual
@@ -39,7 +40,8 @@ def aboom(Mz,My):
             Bnew = Astiff+(tsk*sqrt((ypos[4]-ypos[3])**2+(zpos[4]-zpos[3])**2)/6)*(2+sr1)+(tsk*phi/6)*(2+sr2)
             B.append(Bnew)
         elif i==4:
-            Bnew = (tsp*h/6)+(tsk*sqrt((ypos[4]-ypos[3])**2+(zpos[4]-zpos[3])**2)/6)*(2+sr2)+(tsk*(phi-sqrt((ypos[4]-ypos[3])**2+(zpos[4]-zpos[3])**2))/6)*(2+sr1)
+            sr3 = sigratio(Mz, My,zpos[8],zpos[4],ypos[8],ypos[4])
+            Bnew = (tsp*h/6)*(2+sr3)+(tsk*sqrt((ypos[4]-ypos[3])**2+(zpos[4]-zpos[3])**2)/6)*(2+sr2)+(tsk*(phi-sqrt((ypos[4]-ypos[3])**2+(zpos[4]-zpos[3])**2))/6)*(2+sr1)
             B.append(Bnew)
         elif i==5:
             Bnew = Astiff+(tsk*(phi-sqrt((ypos[4]-ypos[3])**2+(zpos[4]-zpos[3])**2)/6))*(2+sr2)+(tsk*2*phi/6)*(2+sr1)
@@ -50,11 +52,14 @@ def aboom(Mz,My):
         elif i==7:
             Bnew = Astiff+(tsk*(phi-sqrt((ypos[4]-ypos[3])**2+(zpos[4]-zpos[3])**2)/6))*(2+sr1)+(tsk*phi/6)*(sr2)
             B.append(Bnew)
+        elif i==8:
+            sr3 = sigratio(Mz, My,zpos[4],zpos[8],ypos[4],ypos[8])
+            Bnew = (tsp*h/6)*(2+sr3)+(tsk*sqrt((ypos[4]-ypos[3])**2+(zpos[4]-zpos[3])**2)/6)*(2+sr1)+(tsk*(phi-sqrt((ypos[4]-ypos[3])**2+(zpos[4]-zpos[3])**2))/6)*(2+sr2)
+            B.append(Bnew)
         elif i==12:
             sr1 = sigratio(Mz, My,zpos[0],zpos[12],ypos[0],ypos[12])
             Bnew = Astiff + (tsk*phi/6)*(2+sr2) + (tsk*phi/6)*(2+sr1)
             B.append(Bnew)
-            print (sr1, sr2)
         else:
             Bnew = Astiff + (tsk*phi/6)*(2+sr2) + (tsk*phi/6)*(2+sr1)
             B.append(Bnew)
