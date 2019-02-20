@@ -14,10 +14,6 @@ def sigratio(Mz,My,z2,z1,y2,y1):
     from actmoi import actualmoi
     from actcent import centactual
 
-    Mz = 10000 #moment in z' direction (Nm)
-    My = 10000 #moment in y' direction (Nm)
-
-
     Izz, Iyy = actualmoi(11)
     zc = centactual(11)
 
