@@ -16,9 +16,6 @@ def aboom(Mz,My):
     from actcent import centactual
     from cs import crosssec
 
-    Mz = 10000 #moment in z' direction
-    My = 10000 #moment in y' direction
-
     c = 0.515  # aileron chord
     h = 0.248  # aileron height
     r = h / 2  # leading edge section radius
