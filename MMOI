@@ -3,7 +3,7 @@
 
 #CALCULATE THE MMOI around the y axis
 
-def mmoiy(Aboom,zcentr,zpos):
+def moiy(Aboom,zcentr,zpos):
     lst=[]
     n=0
     for j in Aboom:
@@ -17,7 +17,7 @@ def mmoiy(Aboom,zcentr,zpos):
 
 #CALCULATE THE MMOI around the z axis
 
-def mmoiy(Aboom,ypos):
+def moiz(Aboom,ypos):
     l=[]
     n=0
     for j in Aboom:
