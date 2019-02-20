@@ -3,7 +3,10 @@
 
 
 
-def qb(P,q,theta,Aboom,zpos,ypos,Iyy,Izz):
+def qb(P,q,theta,Aboom,zpos,ypos):
+    theta= radians(theta) # angle in degrees
+    Sy = P*sin(theta)+q*cos(theta) # shear force rotated in our coordinate system
+    Sz= P*cos(theta)-q*sin(theta) #shear force rotated in our coordinate system
     h=0
     lstqb=[]
     for n in Aboom:
