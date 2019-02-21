@@ -1,0 +1,43 @@
+#SHEAR CENTER
+
+#Cell1 base shear contribution to moment (circular)
+qb=[1.,2.,3.]   #base shear flows
+dx=[1.,4.,5.]    #distance shear flow acts in x
+dy=[8.,4.,3.]    #distance shear flow acts in y
+rx=[2.,3.,1.]    #arm from shear force to moment in x
+ry=[5.,6.,4.]    #arm from shear force to moment in y
+
+#Cell2 base shear contribution to moment (triangle)
+qb2=[3.,4.,7.,3.,2.]
+ds=[2.,2.,2.,2.,1.]
+r=[5.,5.,5.,5.,5.]
+
+#Redundant shear flows contribution
+qs=[3.,7.]   #redundant shear 
+a=[2.,8.]    #area
+
+
+
+def shearcenter(qb,dx,dy,rx,ry,qb2,ds,qs,a,r):
+    Ca=0.515
+    ha=0.248
+    l= Ca-0.5*ha
+    moment =0.
+    for i in range(len(qb)):
+        M = qb[i]*dx[i]*ry[i]+qb[i]*dy[i]*rx[i]
+        moment = moment + M
+
+    for i in range(len(qb2)):
+        M2 = qb2[i]*ds[i]*r[i]
+        moment = moment + M2  
+    
+    for i in range(len(qs)):
+        M3 = 2*qs[i]*a[i]
+        moment = moment + M3
+    SC = l - moment     
+     
+    return SC
+
+SCC=shearcenter(qb,dx,dy,rx,ry,qb2,ds,qs,a,r)
+print (SCC)
+
