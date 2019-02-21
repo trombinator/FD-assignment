@@ -30,6 +30,10 @@ def qb(P,q,theta,Aboom,zpos,ypos,Izz,Iyy):
         h+=1
         lstqbleft.append(qb)
         print (h)
+        
+    lstqbright[4]=0
+    lstqbright[9]=0
+    lstqbleft[4]=0
     
     
     return lstqbright,lstqbleft
