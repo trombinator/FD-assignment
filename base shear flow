@@ -1,26 +1,36 @@
-def qb(Sy,Sz,theta,Aboom,zpos,ypos,Izz,Iyy):
+#find base shear flow given the forces P and q, the angle theta, the MOI Iyy and Izz, the list of areas Aboom, the z and y positions and it returns
+# a list of shear flows for the upper part of the aileron, starting from TE, the
+#first list is the list the qb of the right cell and the second list is the qb of 
+#left cell
+from math import *
+
+
+def qb(P,q,theta,Aboom,zpos,ypos,Izz,Iyy):
     theta= radians(theta) # angle in degrees
-    Sy' = Sy*cos(theta)+Sz*sin(theta) # shear force rotated in our coordinate system
-    Sz' =  Sz*cos(theta)-Sy*sin(theta) #shear force rotated in our coordinate system
+    Sy = P*sin(theta)+q*cos(theta) # shear force rotated in our coordinate system
+    Sz=  P*cos(theta)-q*sin(theta) #shear force rotated in our coordinate system
     h=0
     lstqbright=[]
     lstqbleft=[]
     rightcell=Aboom[0:5]+Aboom[8:13]
     leftcell=Aboom[4:9]
-   
+    #due to symmetry we only need to consider one side of the aileron
     #first calculate shear flow in right cell
     
     for n in rightcell:
-        qb=(Sz/Iyy)*Aboom[h]*zpos[h]-(Sy/Izz)*Aboom[h]*ypos[h]
+        qb=(Sz/Iyy)*rightcell[h]*zpos[h]-(Sy/Izz)*rightcell[h]*ypos[h]
         h+=1
         lstqbright.append(qb)
+        print(h)
         
     #secondly calculate the shear flow in the left cell
-    
+    h=0
     for i in leftcell:
-        qb=(Sz/Iyy)*Aboom[h]*zpos[h]-(Sy/Izz)*Aboom[h]*ypos[h]
+        qb=(Sz/Iyy)*leftcell[h]*zpos[h]-(Sy/Izz)*leftcell[h]*ypos[h]
         h+=1
         lstqbleft.append(qb)
+        print (h)
     
     
     return lstqbright,lstqbleft
+
