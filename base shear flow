@@ -12,6 +12,7 @@ def qb(P,q,theta,Aboom,zpos,ypos,Izz,Iyy):
     h=0
     lstqbright=[]
     lstqbleft=[]
+    total=[]
     rightcell=Aboom[0:5]+Aboom[8:13]
     leftcell=Aboom[4:9]
     #due to symmetry we only need to consider one side of the aileron
@@ -21,7 +22,7 @@ def qb(P,q,theta,Aboom,zpos,ypos,Izz,Iyy):
         qb=(Sz/Iyy)*rightcell[h]*zpos[h]-(Sy/Izz)*rightcell[h]*ypos[h]
         h+=1
         lstqbright.append(qb)
-        print(h)
+        
         
     #secondly calculate the shear flow in the left cell
     h=0
@@ -29,12 +30,19 @@ def qb(P,q,theta,Aboom,zpos,ypos,Izz,Iyy):
         qb=(Sz/Iyy)*leftcell[h]*zpos[h]-(Sy/Izz)*leftcell[h]*ypos[h]
         h+=1
         lstqbleft.append(qb)
+        
+    h=0
+    for i in Aboom:
+        qb=(Sz/Iyy)*Aboom[h]*zpos[h]-(Sy/Izz)*Aboom[h]*ypos[h]
+        h+=1
+        lstqbleft.append(qb)
         print (h)
         
     lstqbright[4]=0
     lstqbright[9]=0
     lstqbleft[4]=0
+    total[-1]=0
     
     
-    return lstqbright,lstqbleft
+    return total,lstqbright,lstqbleft
 
