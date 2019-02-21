@@ -1,17 +1,26 @@
-#find base shear flow given the forces P and q, the angle theta, the MOI Iyy and Izz, the list of areas Aboom, the z and y positions and it returns
-# a list of shear flows starting from TE and going up
-
-
-
-def qb(P,q,theta,Aboom,zpos,ypos):
+def qb(Sy,Sz,theta,Aboom,zpos,ypos,Izz,Iyy):
     theta= radians(theta) # angle in degrees
-    Sy = P*sin(theta)+q*cos(theta) # shear force rotated in our coordinate system
-    Sz= P*cos(theta)-q*sin(theta) #shear force rotated in our coordinate system
+    Sy' = Sy*cos(theta)+Sz*sin(theta) # shear force rotated in our coordinate system
+    Sz' =  Sz*cos(theta)-Sy*sin(theta) #shear force rotated in our coordinate system
     h=0
-    lstqb=[]
-    for n in Aboom:
-        qb=-(Sz/Iyy)*Aboom[h]*zpos[h]-(Sy/Izz)*Aboom[h]*ypos[h]
+    lstqbright=[]
+    lstqbleft=[]
+    rightcell=Aboom[0:5]+Aboom[8:13]
+    leftcell=Aboom[4:9]
+   
+    #first calculate shear flow in right cell
+    
+    for n in rightcell:
+        qb=(Sz/Iyy)*Aboom[h]*zpos[h]-(Sy/Izz)*Aboom[h]*ypos[h]
         h+=1
-        lstqb.append(qb)
+        lstqbright.append(qb)
         
-    return lstqb
+    #secondly calculate the shear flow in the left cell
+    
+    for i in leftcell:
+        qb=(Sz/Iyy)*Aboom[h]*zpos[h]-(Sy/Izz)*Aboom[h]*ypos[h]
+        h+=1
+        lstqbleft.append(qb)
+    
+    
+    return lstqbright,lstqbleft
