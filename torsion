@@ -1,17 +1,18 @@
-def torsion(eta,P,q,theta,F1y,F2y,F3y,A1z):
-    theta= radians(theta)    #angle
+def torque(Sz,Sy,Mz,My,P):
+    from math import radians, sin, cos
+    from shearcenter import shearcent
+    
+    zs, ys = shearcent(Mz,My)
+    
+    theta= radians(25)    #angle
     c = 0.515                # aileron chord
     h = 0.248                # aileron height
     l= 0.875*c               #hinge line position
-    # q acts at 0.75c from TE on the neutral, P acts at h/2 from the neutral line
-    #and at one chord length from the TE
-    qy= q*cos(theta)                      #y component of q
-    Py= P*sin(theta)                      #y component of P
-    Pz= P*cos(theta)                      #z component of P
-    armq=0.75*c
-    armP=h/2
+    Szc = Sz - P #Forces in z acting at the hinge
+    Syt = Szc * sin(theta) + Sy * cos(theta)  # shear force rotated in our coordinate system
+    Szt = Szc * cos(theta) - Sy * sin(theta)  # shear force rotated in our coordinate system
+    armz=0.75*c
+    army= h/2
     #taking moments around the shear centre
-    T=-armP*Pz+armP*Py-A1z*(c-eta)-F1y*(l-eta)-F2y*(l-eta)-F3y*(l-eta)+qy*(armq-eta)
-    
-    
+    T = Syt*(zs-armz)-Szt*(ys)-P*(army-ys)
     return T
