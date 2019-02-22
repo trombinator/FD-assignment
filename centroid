@@ -2,16 +2,34 @@
 
 # given Aboom the are of the booms and the z position of the booms
 
-def centroid(Aboom,zpos):
-    
-    listz=[]
+def centsim(Mz, My):
+    from cs import crosssec
+    from Boomarea import aboom
+    from math import radians, sin, cos
 
-    n=0
+    theta = radians(25)
+
+    Myt = Mz * sin(theta) + My * cos(theta) #My transformed to z'-y'
+    Mzt = Mz * cos(theta) - My * sin(theta) #Mz transformed to z'-y'
+
+    nstiff, zpos, ypos = crosssec(11)
+    Aboom = aboom(Mzt, Myt)
+
+    listz = []
+    listy = []
+    n = 0
     for i in Aboom:
-    
-        zcentroid=((i*zpos[n])/sum(Aboom))
+        zcentroid = ((i * zpos[n]) / sum(Aboom))
         listz.append(zcentroid)
-    
-        n+=1
-    zcentr=sum(listz)
+
+        n += 1
+    zcentr = sum(listz)
+    n = 0
+    for i in Aboom:
+        ycentroid = ((i * ypos[n]) / sum(Aboom))
+        listy.append(ycentroid)
+
+        n += 1
+    ycentr = sum(listy)
+    return zcentr, ycentr
     return zcentr
