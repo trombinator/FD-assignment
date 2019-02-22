@@ -1,48 +1,65 @@
-#find base shear flow given the forces P and q, the angle theta, the MOI Iyy and Izz, the list of areas Aboom, the z and y positions and it returns
+# find base shear flow given the forces P and q, the angle theta, the MOI Iyy and Izz, the list of areas Aboom, the z and y positions and it returns
 # a list of shear flows for the upper part of the aileron, starting from TE, the
-#first list is the list the qb of the right cell and the second list is the qb of 
-#left cell
-from math import *
+# first list is the list the qb of the right cell and the second list is the qb of
+# left cell
+import math
 
 
-def qb(P,q,theta,Aboom,zpos,ypos,Izz,Iyy):
-    theta= radians(theta) # angle in degrees
-    Sy = P*sin(theta)+q*cos(theta) # shear force rotated in our coordinate system
-    Sz=  P*cos(theta)-q*sin(theta) #shear force rotated in our coordinate system
-    h=0
-    lstqbright=[]
-    lstqbleft=[]
-    total=[]
-    rightcell=Aboom[0:5]+Aboom[8:13]
-    leftcell=Aboom[4:9]
-    #due to symmetry we only need to consider one side of the aileron
-    #first calculate shear flow in right cell
-    
+def qbase(Sz, Sy, Mz, My):
+    from Boomarea import aboom
+    from cs import crosssec
+    from simmoi import moisim
+    from math import radians,sin,cos
+    theta = 25 #deflection angle (deg)
+    theta = radians(theta)  # angle in degrees
+
+    Myt = Mz * sin(theta) + My * cos(theta) #My transformed to z'-y'
+    Mzt = Mz * cos(theta) - My * sin(theta) #Mz transformed to z'-y'
+
+    nstiff, zpos, ypos = crosssec(11)
+    Aboom = aboom(Mzt,Myt)
+    Izz, Iyy = moisim(Mzt,Myt)
+
+
+    Syt = Sz * sin(theta) + Sy * cos(theta)  # shear force rotated in our coordinate system
+    Szt = Sz * cos(theta) - Sy * sin(theta)  # shear force rotated in our coordinate system
+    h = 0
+    lstqbright = []
+    lstqbleft = []
+    total = []
+    rightcell = Aboom[0:5] + Aboom[8:13]
+    leftcell = Aboom[4:9]
+    # due to symmetry we only need to consider one side of the aileron
+    # first calculate shear flow in right cell
+    h = 0
     for n in rightcell:
-        qb=(Sz/Iyy)*rightcell[h]*zpos[h]-(Sy/Izz)*rightcell[h]*ypos[h]
-        h+=1
-        lstqbright.append(qb)
-        
-        
-    #secondly calculate the shear flow in the left cell
-    h=0
+        if h < 5:
+            qb = -(Szt / Iyy) * rightcell[h] * zpos[h] - (Syt / Izz) * rightcell[h] * ypos[h]
+            h += 1
+            lstqbright.append(qb)
+        else:
+            qb = -(Szt / Iyy) * rightcell[h] * zpos[h+3] - (Syt / Izz) * rightcell[h] * ypos[h+3]
+            h += 1
+            lstqbright.append(qb)
+
+    # secondly calculate the shear flow in the left cell
+    h = 0
     for i in leftcell:
-        qb=(Sz/Iyy)*leftcell[h]*zpos[h]-(Sy/Izz)*leftcell[h]*ypos[h]
-        h+=1
+        qb = -(Szt / Iyy) * leftcell[h] * zpos[h+5] - (Syt / Izz) * leftcell[h] * ypos[h+5]
+        h += 1
         lstqbleft.append(qb)
-        
-    h=0
+
+    h = 0
     for i in Aboom:
-        qb=(Sz/Iyy)*Aboom[h]*zpos[h]-(Sy/Izz)*Aboom[h]*ypos[h]
-        h+=1
-        lstqbleft.append(qb)
-        print (h)
-        
-    lstqbright[4]=0
-    lstqbright[9]=0
-    lstqbleft[4]=0
-    total[-1]=0
-    
-    
-    return total,lstqbright,lstqbleft
+        qb = -(Szt / Iyy) * Aboom[h] * zpos[h] - (Syt / Izz) * Aboom[h] * ypos[h]
+        h += 1
+        total.append(qb)
+
+
+    lstqbright[4] = 0
+    lstqbright[9] = 0
+    lstqbleft[4] = 0
+    total[12] = 0
+
+    return total, lstqbright, lstqbleft
 
