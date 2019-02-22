@@ -1,30 +1,39 @@
 # Aboom is the area of the boom, zcentr is the centroid, zpos and ypos is the z and y position of each boom
 
 
-#CALCULATE THE MMOI around the y axis
+# CALCULATE THE MMOI around the y axis
 
-def moiy(Aboom,zcentr,zpos):
-    lst=[]
-    n=0
+def moisim(Mz, My):
+    from math import radians, sin, cos
+    from cs import crosssec
+    from Boomarea import aboom
+    from simcent import centsim
+
+    theta = radians(25)
+    Myt = Mz * sin(theta) + My * cos(theta) #My transformed to z'-y'
+    Mzt = Mz * cos(theta) - My * sin(theta) #Mz transformed to z'-y'
+
+    nstiff, zpos,ypos = crosssec(11)
+    Aboom = aboom(Mzt, Myt)
+    zc, yc = centsim(Mzt,Myt)
+
+    lsty = []
+    n = 0
     for j in Aboom:
-    
-        x=j*((zcentr-zpos[n])**2)
-        lst.append(x)
-        n+=1
-    
-    Iyy=sum(lst)
-    return Iyy
+        x = j * ((zc - zpos[n]) ** 2)
+        lsty.append(x)
+        n += 1
 
-#CALCULATE THE MMOI around the z axis
+    Iyy = sum(lsty)
 
-def moiz(Aboom,ypos):
-    l=[]
-    n=0
+
+
+    lstz = []
+    n = 0
     for j in Aboom:
+        q = j * ((yc-ypos[n]) ** 2)
+        lstz.append(q)
+        n += 1
 
-        q=j*((ypos[n])**2)
-        l.append(q)
-        n+=1
-
-    Izz=sum(l)
-    return Izz
+    Izz = sum(lstz)
+    return Izz, Iyy
