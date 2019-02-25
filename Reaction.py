@@ -1,34 +1,22 @@
+from math import *
 from matplotlib import pyplot as plt
 import numpy as np
 
+def reactionforces(Izz, Iyy):
 
-
-a = np.array([[3,1], [1,2]])
-b = np.array([9,8])
-
-x = np.linalg.solve(a, b)
-
-print np.allclose(np.dot(a, x), b)
-
-print x
-
-x1 = 0.174
-x2 = 1.051
-x3 = 2.512
-d1 = 1.034
-d3 = 2.066
-xa = 0.3
-theta = 25.0*(np.pi)/180
-E = 1.0*(10**9)
-Iyy = 1.0*(10**(-5))
-Izz = 1.0*(10**(-5))
-q = 1.0*(10**3)
-L = 2.691
-P = 20.6*(10**3)
-ch = 0.515
-h = 0.248
-
-def reactionforces(E, Izz, Iyy, q, P, theta, xa, x1, x2, x3, d1, d3, ch, h, L):
+    x1 = 0.174
+    x2 = 1.051
+    x3 = 2.512
+    d1 = 0.01034
+    d3 = 0.02066
+    xa = 0.3
+    theta = 25.0*(np.pi)/180.0
+    E = 73.1*(10**9)
+    q = 1.0*(10**3)
+    L = 2.691
+    P = 20.6*(10**3)
+    ch = 0.515
+    h = 0.248
 
     ## H2x == 0
 
@@ -48,7 +36,7 @@ def reactionforces(E, Izz, Iyy, q, P, theta, xa, x1, x2, x3, d1, d3, ch, h, L):
     ## Moment about the hinge line
     ## Actuator force
 
-    A = (qy*((0.25*ch) - (h/2)) + Pz*(h/2) - Py*(h/2))/((np.sin(theta)*(h/2)) - (np.cos(theta)*(h/2)))
+    A = (qy*L*((0.25*ch) - (h/2.0)) + Pz*(h/2.0) - Py*(h/2.0))/((np.sin(theta)*(h/2.0)) - (np.cos(theta)*(h/2.0)))
 
     Ay = A*np.sin(theta)
     Az = A*np.cos(theta)
@@ -67,7 +55,7 @@ def reactionforces(E, Izz, Iyy, q, P, theta, xa, x1, x2, x3, d1, d3, ch, h, L):
 
     ## Maccauly at Hinge 2
 
-    C21 = ((x2 - x1)**3)/6
+    C21 = ((x2 - x1)**3)/6.0
     C22 = 0.0
     C23 = 0.0
     C24 = -x2
@@ -75,8 +63,8 @@ def reactionforces(E, Izz, Iyy, q, P, theta, xa, x1, x2, x3, d1, d3, ch, h, L):
 
     ## Maccauly at Hinge 3
 
-    C31 = ((x3 - x1)**3)/6
-    C32 = ((x3 - x2)**3)/6
+    C31 = ((x3 - x1)**3)/6.0
+    C32 = ((x3 - x2)**3)/6.0
     C33 = 0.0
     C34 = -x3
     C35 = -1.0
@@ -107,11 +95,11 @@ def reactionforces(E, Izz, Iyy, q, P, theta, xa, x1, x2, x3, d1, d3, ch, h, L):
 
     ## Matrix of knowns K
 
-    K1 = (qy/24)*(x1**4) - (E*Iyy*dy1)
-    K2 = (qy/24)*(x2**4) - (Py/6)*((x2+(xa/2)-x2)**3) - (E*Iyy*dy2)
-    K3 = (qy/24)*(x3**4) - (Py/6)*((x3+(xa/2)-x2)**3) - (Ay/6)*((x3-(xa/2)-x2)**3) - (E*Iyy*dy3)
-    K4 = qy*L - Py - Ay
-    K5 = (qy/2)*(L**2) - Ay*(x2-(xa/2)) - Py*(x2+(xa/2))
+    K1 = (qy/24.0)*(x1**4) + (E*Izz*dy1)
+    K2 = (qy/24.0)*(x2**4) + (Ay/6.0)*((x2+(xa/2.0)-x2)**3) + (E*Izz*dy2)
+    K3 = (qy/24.0)*(x3**4) + (Ay/6.0)*((x3+(xa/2.0)-x2)**3) + (Py/6.0)*((x3-(xa/2.0)-x2)**3) + (E*Izz*dy3)
+    K4 = qy*L + Py + Ay
+    K5 = (qy/2.0)*(L**2) + Ay*(x2-(xa/2.0)) + Py*(x2+(xa/2.0))
 
     K = np.array([K1, K2, K3, K4, K5])
 
@@ -129,7 +117,7 @@ def reactionforces(E, Izz, Iyy, q, P, theta, xa, x1, x2, x3, d1, d3, ch, h, L):
 
     ## Maccauly at Hinge 2
     
-    D21 = ((x2 - x1)**3)/6
+    D21 = ((x2 - x1)**3)/6.0
     D22 = 0.0
     D23 = 0.0
     D24 = x2
@@ -137,8 +125,8 @@ def reactionforces(E, Izz, Iyy, q, P, theta, xa, x1, x2, x3, d1, d3, ch, h, L):
 
     ## Maccauly at Hinge 3
 
-    D31 = ((x3 - x1)**3)/6
-    D32 = ((x3 - x2)**3)/6
+    D31 = ((x3 - x1)**3)/6.0
+    D32 = ((x3 - x2)**3)/6.0
     D33 = 0.0
     D34 = x3
     D35 = 1.0
@@ -169,14 +157,12 @@ def reactionforces(E, Izz, Iyy, q, P, theta, xa, x1, x2, x3, d1, d3, ch, h, L):
 
     ## Matrix of knowns K
 
-    M1 = (qz/24)*(x1**4) - (E*Izz*dz1)
-    M2 = (qz/24)*(x2**4) - (Pz/6)*((x2+(xa/2)-x2)**3) - (E*Izz*dz2)
-    M3 = (qz/24)*(x3**4) - (Pz/6)*((x3+(xa/2)-x2)**3) - (Az/6)*((x3-(xa/2)-x2)**3) - (E*Izz*dz3)
+    M1 = (qz/24.0)*(x1**4) + (E*Iyy*dz1)
+    M2 = (qz/24.0)*(x2**4) - (Az/6.0)*((x2+(xa/2.0)-x2)**3) + (E*Iyy*dz2)
+    M3 = (qz/24.0)*(x3**4) - (Az/6.0)*((x3+(xa/2.0)-x2)**3) - (Pz/6.0)*((x3-(xa/2.0)-x2)**3) + (E*Iyy*dz3)
     M4 = qz*L - Pz - Az
-    M5 = (qz/2)*(L**2) - Az*(x2-(xa/2)) - Pz*(x2+(xa/2))
+    M5 = (qz/2.0)*(L**2) - Az*(x2-(xa/2.0)) - Pz*(x2+(xa/2.0))
 
     M = np.array([M1, M2, M3, M4, M5])
 
     return (np.linalg.solve(C, K), np.linalg.solve(D, M), A)
-
-print reactionforces(E, Izz, Iyy, q, P, theta, xa, x1, x2, x3, d1, d3, ch, h, L)
