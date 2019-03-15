@@ -8,22 +8,22 @@ from control import*
 
 # Stationary flight condition
 
-hp0    =    0   	   # pressure altitude in the stationary flight condition [m]
-V0     =    60         # true airspeed in the stationary flight condition [m/sec]
-alpha0 =   0          # angle of attack in the stationary flight condition [rad]
-th0    =   0          # pitch angle in the stationary flight condition [rad]
+hp0    =    3280.4  	   # pressure altitude in the stationary flight condition [m]
+V0     =    84         # true airspeed in the stationary flight condition [m/sec]
+alpha0 =   0.020944       # angle of attack in the stationary flight condition [rad]
+th0    =   0.03        # pitch angle in the stationary flight condition [rad]
 
 # Aircraft mass
-m      =    60500         # mass [m]
+m      =    6200         # mass [kg]
 
 # aerodynamic properties
-e      =      0.8       # Oswald factor [ ]
-CD0    =      0.04       # Zero lift drag coefficient [ ]
-CLa    =      5.084       # Slope of CL-alpha curve [ ]
+e      =      0.44       # Oswald factor [ ]
+CD0    =      0.0289       # Zero lift drag coefficient [ ]
+CLa    =      5.16       # Slope of CL-alpha curve [ ]
 
 # Longitudinal stability
-Cma    =      0       # longitudinal stabilty [ ]
-Cmde   =      0       # elevator effectiveness [ ]
+Cma    =      -0.555       # longitudinal stabilty [ ]
+Cmde   =      -1.366    # elevator effectiveness [ ]
 
 # Aircraft geometry
 
@@ -122,15 +122,15 @@ C2s=np.matrix([[CXu,CXa,CZ0,CXq],
 
 
 
-C1s=np.matrix([[(-2*muc),0,0,0],
-     [0,(CZadot- 2*muc),0,0],
-     [0,0,-1,0],
-     [0,(Cmadot),0,-2*muc*KY2]])
+C1s=np.matrix([[(-2*muc)*c/V0,0,0,0],
+     [0,(CZadot- 2*muc)*c/V0,0,0],
+     [0,0,-1*c/V0,0],
+     [0,(Cmadot)*c/V0,0,-2*muc*KY2*c/V0]])
 
-C3s=np.matrix([[-CXde],
-    [-CZde],
+C3s=np.matrix([[CXde],
+    [CZde],
     [0],
-    [-Cmde]])
+    [Cmde]])
 
 C1s_inv=np.linalg.inv(C1s)
 
@@ -140,7 +140,7 @@ As=-C1s_inv*C2s
 Bs=-C1s_inv*C3s
 
 
-Cs=[[0,0,0,V0/c]]
+Cs=[[0,0,0,1]]
 Ds=[[0]]
 
 
@@ -148,7 +148,7 @@ syss=ss(As,Bs,Cs,Ds)
 
 #to print eig values:
     
-#print (np.linalg.eigvals(syss.A))
+print (np.linalg.eigvals(syss.A))
 
 
 
@@ -183,3 +183,4 @@ Ca=[[0,0,(2*V0)/b,0]]
 Da=[[0,0]]
 
 sysa=ss(Aa,Ba,Ca,Da)
+
