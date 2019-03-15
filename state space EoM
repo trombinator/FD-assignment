@@ -152,6 +152,8 @@ print (np.linalg.eigvals(syss.A))
 
 
 
+
+
 #asymmetric part
 
 C2a= np.matrix([[CYb,CL,CYp,CYr- 4*mub],
@@ -159,16 +161,16 @@ C2a= np.matrix([[CYb,CL,CYp,CYr- 4*mub],
      [Clb,0,Clp,Clr],
      [Cnb,0,Cnp,Cnr]])
 
-C1a= np.matrix([[(CYbdot-2*mub),0,0,0],
-     [0,-0.5,0,0],
-     [0,0,-4*mub*KX2,4*mub*KXZ],
-     [Cnbdot,0,4*mub*KXZ,-4*mub*KZ2]])
+C1a= np.matrix([[(CYbdot-2*mub)*b/V0,0,0,0],
+     [0,-0.5*b/V0,0,0],
+     [0,0,-4*mub*KX2*b/V0,4*mub*KXZ*b/V0],
+     [Cnbdot,0,4*mub*KXZ*b/V0,-4*mub*KZ2*b/V0]])
 
 
-C3a=np.matrix([[-CYda,-CYdr],
+C3a=np.matrix([[CYda,CYdr],
     [0,0],
-    [-Clda,Cldr],
-    [-Cnda,-Cndr]])
+    [Clda,Cldr],
+    [Cnda,Cndr]])
 
 
 C1a_inv=np.linalg.inv(C1a)
@@ -178,9 +180,10 @@ Aa=-C1a_inv*C2a
 
 Ba=-C1a_inv*C3a
 
-Ca=[[0,0,(2*V0)/b,0]]
+Ca=[[0,0,(2*b)/V0,0]]
 
 Da=[[0,0]]
 
 sysa=ss(Aa,Ba,Ca,Da)
+
 
